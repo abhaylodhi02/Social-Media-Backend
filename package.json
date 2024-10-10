@@ -1,0 +1,15 @@
+{
+  "name": "social-media-backend",
+  "version": "1.0.0",
+  "description": "Social Media Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "JS",
+    "Backend"
+  ],
+  "author": "abhay lodhi",
+  "license": "ISC"
+}
