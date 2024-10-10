@@ -12,6 +12,6 @@ const connectDB = async () => {
     console.error("Error connecting to MongoDB:", error.message);
     process.exit(1); // Exit the process if connection fails
   }
-};
+} 
 
 export default connectDB;
