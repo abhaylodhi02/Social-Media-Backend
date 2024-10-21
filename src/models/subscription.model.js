@@ -1,15 +1,15 @@
 import mongoose, {Schema} from "mongoose";
 
-const followSchema = new Schema({
-    follower:{
+const subscriptionSchema = new Schema({
+    subscriber:{
         type: Schema.Types.ObjectId, // one who is subscribing
         ref: "User"
     },
-    followee:{
+    channel:{
         type: Schema.Types.ObjectId, // one to whom 'subscriber is subscribing
         ref: "User" 
     }
 },{timestamps: true})
 
 
-export const Follow = mongoose.model("Follow", followSchema)
+export const Subscription = mongoose.model("Subscription", subscriptionSchema)
