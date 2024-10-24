@@ -5,6 +5,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 
+
 const generateAccessAndRefreshTokens = async(userId) => {
     try{
         const user = await User.findById(userId)
@@ -266,28 +267,32 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
     }
 })
 
-const changeCurrentPassword = asyncHandler(async(req,res)=>{
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
     
-    const {oldPassword, newPassword} = req.body
-    //can also retrieve confirm password, can also check oldPassword === newPassword, could be done on frontend
-
-    // Note : User is logged in at this stage
-
-    const user = await User.findById(req.user?._id)
-    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
-
-    if(!isPasswordCorrect){
-        throw new ApiError(400,"Invlaid old password!")
+    // Validate input
+    if (!oldPassword || !newPassword) {
+        throw new ApiError(400, "Both old and new passwords are required!");
     }
 
-    user.password = newPassword
-    await user.save({validateBeforeSave: false})
+    // Retrieve user and ensure password is included
+    const user = await User.findById(req.user?._id).select("+password");
+
+    // Check if the old password matches
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+    if (!isPasswordCorrect) {
+        throw new ApiError(400, "Invalid old password!");
+    }
+
+    // Update password and save
+    user.password = newPassword;
+    await user.save({ validateBeforeSave: false });
 
     return res
-    .status(200)
-    .json(new ApiResponse(200, {}, "Password Changed Successfully!"))
+        .status(200)
+        .json(new ApiResponse(200, {}, "Password changed successfully!"));
+});
 
-})
 
 const getCurrentUser = asyncHandler(async(req,res)=>{
     return res
